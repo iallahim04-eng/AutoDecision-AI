@@ -54,4 +54,452 @@
         <section id="tab-dashboard" class="space-y-6">
             <div class="bg-gradient-to-r from-blue-900/40 to-slate-900 border border-blue-500/20 rounded-2xl p-6 sm:p-8">
                 <div class="max-w-3xl">
-                    <span class="bg-blue-500/10 text-blue-400 text-xs px-3 py-1 rounded-full font-semibold border border-blue-500/30">مش
+                    <span class="bg-blue-500/10 text-blue-400 text-xs px-3 py-1 rounded-full font-semibold border border-blue-500/30">مشروع تخرج أكاديمي</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold mt-3 tracking-tight">نظام دعم القرار الذكي لاختيار السيارة المناسبة</h2>
+                    <p class="text-slate-300 mt-2 text-sm sm:text-base leading-relaxed">
+                        نظام متكامل يعتمد على خوارزميات تحليل متعدد المعايير (MCDM) وحساب التكلفة الكلية للملكية (TCO) لمساعدتك في اتخاذ القرار الشرائي الأمثل بدقة وموثوقية أكاديمية.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium">السيارات في القاعدة</p>
+                        <h3 class="text-3xl font-extrabold mt-1 text-blue-400">86</h3>
+                    </div>
+                    <div class="bg-blue-600/15 text-blue-400 p-4 rounded-xl"><i class="fa-solid fa-car text-xl"></i></div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium">عمليات التحليل المنجزة</p>
+                        <h3 class="text-3xl font-extrabold mt-1 text-emerald-400">142</h3>
+                    </div>
+                    <div class="bg-emerald-600/15 text-emerald-400 p-4 rounded-xl"><i class="fa-solid fa-brain text-xl"></i></div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium">الشركات المصنعة</p>
+                        <h3 class="text-3xl font-extrabold mt-1 text-purple-400">12</h3>
+                    </div>
+                    <div class="bg-purple-600/15 text-purple-400 p-4 rounded-xl"><i class="fa-solid fa-industry text-xl"></i></div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium">دقة التوصيات</p>
+                        <h3 class="text-3xl font-extrabold mt-1 text-amber-400">96.4%</h3>
+                    </div>
+                    <div class="bg-amber-600/15 text-amber-400 p-4 rounded-xl"><i class="fa-solid fa-bullseye text-xl"></i></div>
+                </div>
+            </div>
+
+            <!-- Quick Access Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                <div onclick="switchTab('decision')" class="bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-blue-500/50 transition cursor-pointer rounded-2xl p-6 group">
+                    <div class="text-blue-400 text-2xl mb-3 group-hover:scale-110 transition"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <h3 class="text-lg font-bold">ابدأ محرك التوصية</h3>
+                    <p class="text-xs text-slate-400 mt-1">أدخل ميزانيتك واحتياجاتك للحصول على أفضل 4 سيارات مطابقة.</p>
+                </div>
+                <div onclick="switchTab('tco')" class="bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-blue-500/50 transition cursor-pointer rounded-2xl p-6 group">
+                    <div class="text-emerald-400 text-2xl mb-3 group-hover:scale-110 transition"><i class="fa-solid fa-chart-line"></i></div>
+                    <h3 class="text-lg font-bold">حساب التكلفة الكلية (TCO)</h3>
+                    <p class="text-xs text-slate-400 mt-1">احسب المصاريف الشاملة على مدى 5 سنوات وقارن بين الخيارات.</p>
+                </div>
+                <div onclick="switchTab('catalog')" class="bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-blue-500/50 transition cursor-pointer rounded-2xl p-6 group">
+                    <div class="text-purple-400 text-2xl mb-3 group-hover:scale-110 transition"><i class="fa-solid fa-database"></i></div>
+                    <h3 class="text-lg font-bold">تصفح قاعدة السيارات</h3>
+                    <p class="text-xs text-slate-400 mt-1">استعرض الـ 86 سيارة مع المواصفات والتقييمات التفصيلية.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. CAR CATALOG TAB -->
+        <section id="tab-catalog" class="hidden space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                <div class="w-full md:w-1/3 relative">
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400"><i class="fa-solid fa-search"></i></span>
+                    <input type="text" id="search-input" oninput="loadCars()" placeholder="ابحث باسم السيارة أو الشركة المصنعة..." class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pr-10 pl-4 text-sm focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="flex flex-wrap gap-3 w-full md:w-auto">
+                    <select id="filter-brand" onchange="loadCars()" class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500">
+                        <option value="all">كل الشركات المصنعة</option>
+                    </select>
+                    <select id="filter-fuel" onchange="loadCars()" class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500">
+                        <option value="all">نوع المحرك (الكل)</option>
+                        <option value="بنزين">بنزين</option>
+                        <option value="هجين">هجين (Hybrid)</option>
+                        <option value="ديزل">ديزل</option>
+                    </select>
+                    <select id="sort-by" onchange="loadCars()" class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500">
+                        <option value="id">الترتيب الافتراضي</option>
+                        <option value="price_asc">السعر: من الأرخص للأغلى</option>
+                        <option value="price_desc">السعر: من الأغلى للأرخص</option>
+                        <option value="rating">الأعلى تقييماً واعتمادية</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Cars Grid -->
+            <div id="cars-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamic Car Cards inserted via JS -->
+            </div>
+        </section>
+
+        <!-- 3. DECISION WIZARD TAB -->
+        <section id="tab-decision" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8">
+                <h3 class="text-xl font-bold mb-4 flex items-center"><i class="fa-solid fa-sliders text-blue-400 ml-2"></i> معايير اتخاذ القرار (Weighted Scoring Model)</h3>
+                <form id="decision-form" onsubmit="runDecisionAnalysis(event)" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">الميزانية القصوى (ريال سعودي)</label>
+                        <input type="number" id="dec-budget" value="130000" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">عدد أفراد الأسرة</label>
+                        <input type="number" id="dec-family" value="5" min="1" max="9" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">المسافة السنوية المتوقعة (كم)</label>
+                        <input type="number" id="dec-km" value="25000" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">نمط الاستخدام الأساسي</label>
+                        <select id="dec-usecase" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500">
+                            <option value="mixed">مختلط (مدينة وسفر)</option>
+                            <option value="city">داخل المدينة غالباً</option>
+                            <option value="travel">سفر ورحلات طويلة</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">نوع المحرك المفضل</label>
+                        <select id="dec-fuel" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500">
+                            <option value="all">أي نوع</option>
+                            <option value="هجين">هجين (Hybrid)</option>
+                            <option value="بنزين">بنزين</option>
+                            <option value="ديزل">ديزل</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-6 rounded-xl transition shadow-lg shadow-blue-600/30">
+                            <i class="fa-solid fa-brain ml-1"></i> تشغيل محرك التوصية
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Decision Results Area -->
+            <div id="decision-results" class="hidden space-y-6">
+                <h3 class="text-xl font-bold">أفضل 4 سيارات مقترحة بناءً على وزن المعايير الأكاديمية:</h3>
+                <div id="decision-cards-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+        </section>
+
+        <!-- 4. TCO CALCULATOR TAB -->
+        <section id="tab-tco" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8">
+                <h3 class="text-xl font-bold mb-4 flex items-center"><i class="fa-solid fa-calculator text-emerald-400 ml-2"></i> حاسبة التكلفة الكلية للملكية (TCO)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">اختر السيارة</label>
+                        <select id="tco-car-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">مدة الامتلاك (سنوات)</label>
+                        <select id="tco-years" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500">
+                            <option value="3">3 سنوات</option>
+                            <option value="5" selected>5 سنوات</option>
+                            <option value="7">7 سنوات</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">المسافة السنوية (كم)</label>
+                        <input type="number" id="tco-km" value="20000" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="md:col-span-3 flex justify-end">
+                        <button onclick="calculateTCO()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-8 rounded-xl transition shadow-lg shadow-emerald-600/30">
+                            احسب التكلفة الكلية
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TCO Results -->
+            <div id="tco-results" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 lg:col-span-2 space-y-4">
+                    <h4 class="text-lg font-bold">تفاصيل المصاريف التقديرية</h4>
+                    <div id="tco-breakdown" class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm"></div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                    <p class="text-xs text-slate-400">إجمالي تكلفة الملكية (TCO)</p>
+                    <h3 id="tco-total-val" class="text-3xl font-extrabold text-emerald-400 mt-2">0 ريال</h3>
+                    <p id="tco-monthly-val" class="text-xs text-slate-300 mt-1">التكلفة الشهرية: 0 ريال</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. WHAT-IF SIMULATOR TAB -->
+        <section id="tab-whatif" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8">
+                <h3 class="text-xl font-bold mb-4 flex items-center"><i class="fa-solid fa-sliders text-purple-400 ml-2"></i> محاكاة السيناريوهات (What-if Scenario Analysis)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">الميزانية الأساسية (ريال)</label>
+                        <input type="number" id="wf-base-budget" value="120000" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">الميزانية الجديدة المقترحة (ريال)</label>
+                        <input type="number" id="wf-new-budget" value="145000" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">المسافة السنوية الأساسية (كم)</label>
+                        <input type="number" id="wf-base-km" value="20000" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">المسافة السنوية المعدلة (كم)</label>
+                        <input type="number" id="wf-new-km" value="35000" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm">
+                    </div>
+                    <div class="md:col-span-2 flex justify-end">
+                        <button onclick="runWhatIf()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold py-2.5 px-8 rounded-xl transition">
+                            تنفيذ المحاكاة
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="whatif-results" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <h4 class="text-lg font-bold text-purple-400">نتائج تحليل السيناريو المقارن:</h4>
+                <p id="whatif-output" class="text-sm text-slate-300 leading-relaxed"></p>
+            </div>
+        </section>
+
+        <!-- 6. ADVANCED COMPARISON TAB -->
+        <section id="tab-compare" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                <h3 class="text-xl font-bold mb-4">المقارنة المتقدمة بين السيارات</h3>
+                <p class="text-xs text-slate-400 mb-4">اختر سيارتين إلى 4 سيارات لمقارنة الأداء والأسعار والمواصفات جنباً إلى جنب.</p>
+                <div id="compare-selectors" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <select id="comp-1" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm"></select>
+                    <select id="comp-2" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm"></select>
+                    <select id="comp-3" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm"></select>
+                    <select id="comp-4" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm"></select>
+                </div>
+                <button onclick="renderComparison()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-6 rounded-xl text-sm">
+                    عرض جدول المقارنة
+                </button>
+            </div>
+            <div id="comparison-output" class="overflow-x-auto"></div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-6 text-center text-xs text-slate-400 mt-auto">
+        <p>AutoDecision AI &copy; 2026 | جامعة القصيم - كلية الحاسب وتقنية المعلومات (نظام دعم القرار)</p>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        let allCars = [];
+
+        async function initApp() {
+            try {
+                const res = await fetch('/api/cars');
+                allCars = await res.json();
+                populateDropdowns();
+                loadCars();
+            } catch (e) {
+                console.error('Error loading cars:', e);
+            }
+        }
+
+        function switchTab(tabId) {
+            ['dashboard', 'catalog', 'decision', 'tco', 'whatif', 'compare'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                const navBtn = document.getElementById(`nav-${t}`);
+                if (navBtn) {
+                    navBtn.className = "text-slate-300 hover:text-blue-300 transition py-2";
+                }
+            });
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.className = "text-blue-400 hover:text-blue-300 transition py-2 border-b-2 border-blue-500 font-semibold";
+            }
+        }
+
+        async function populateDropdowns() {
+            const brandsRes = await fetch('/api/brands');
+            const brands = await brandsRes.json();
+            const brandSelect = document.getElementById('filter-brand');
+            brands.forEach(b => {
+                brandSelect.innerHTML += `<option value="${b}">${b}</option>`;
+            });
+
+            const tcoSelect = document.getElementById('tco-car-select');
+            const compSelects = ['comp-1', 'comp-2', 'comp-3', 'comp-4'].map(id => document.getElementById(id));
+            
+            allCars.forEach(c => {
+                tcoSelect.innerHTML += `<option value="${c.id}">${c.name} (${c.price.toLocaleString()} ر.س)</option>`;
+                compSelects.forEach(sel => {
+                    sel.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+                });
+            });
+        }
+
+        async function loadCars() {
+            const search = document.getElementById('search-input').value;
+            const brand = document.getElementById('filter-brand').value;
+            const fuel = document.getElementById('filter-fuel').value;
+            const sort = document.getElementById('sort-by').value;
+
+            let query = `/api/cars?search=${encodeURIComponent(search)}&brand=${brand}&fuel_type=${fuel}&sort=${sort}`;
+            const res = await fetch(query);
+            const cars = await res.json();
+
+            const grid = document.getElementById('cars-grid');
+            grid.innerHTML = '';
+
+            cars.forEach(car => {
+                grid.innerHTML += `
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-blue-500/50 transition flex flex-col">
+                        <img src="${car.image}" alt="${car.name}" class="h-48 w-full object-cover">
+                        <div class="p-5 flex flex-col flex-grow">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="bg-blue-600/15 text-blue-400 text-xs px-2.5 py-1 rounded-full font-semibold">${car.category}</span>
+                                <span class="text-emerald-400 font-extrabold">${car.price.toLocaleString()} ر.س</span>
+                            </div>
+                            <h4 class="text-lg font-bold mt-1">${car.name}</h4>
+                            <p class="text-xs text-slate-400 mt-2 line-clamp-2">${car.description}</p>
+                            <div class="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-slate-800 text-center text-xs">
+                                <div><span class="text-slate-400 block">المحرك</span><span class="font-semibold">${car.fuel_type}</span></div>
+                                <div><span class="text-slate-400 block">الاعتمادية</span><span class="font-semibold text-amber-400">${car.reliability_score}/10</span></div>
+                                <div><span class="text-slate-400 block">الاستهلاك</span><span class="font-semibold text-emerald-400">${car.fuel_economy} كم/لتر</span></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        async function runDecisionAnalysis(e) {
+            e.preventDefault();
+            const payload = {
+                budget: Number(document.getElementById('dec-budget').value),
+                family_size: Number(document.getElementById('dec-family').value),
+                annual_km: Number(document.getElementById('dec-km').value),
+                use_case: document.getElementById('dec-usecase').value,
+                fuel_preference: document.getElementById('dec-fuel').value
+            };
+
+            const res = await fetch('/api/decision/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            document.getElementById('decision-results').classList.remove('hidden');
+            const grid = document.getElementById('decision-cards-grid');
+            grid.innerHTML = '';
+
+            data.topCars.forEach((car, index) => {
+                grid.innerHTML += `
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="bg-emerald-600/15 text-emerald-400 text-xs px-3 py-1 rounded-full font-bold">التوافق: ${car.matchPercentage}% (#${index+1})</span>
+                                <span class="text-lg font-extrabold text-blue-400">${car.price.toLocaleString()} ر.س</span>
+                            </div>
+                            <h4 class="text-xl font-bold">${car.name}</h4>
+                            <p class="text-xs text-slate-400 mt-2">${car.description}</p>
+                            <div class="mt-4 space-y-1">
+                                <p class="text-xs font-bold text-slate-300">أسباب التوصية:</p>
+                                ${car.reasons.map(r => `<p class="text-xs text-emerald-300 flex items-center"><i class="fa-solid fa-check ml-1.5"></i> ${r}</p>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        async function calculateTCO() {
+            const payload = {
+                car_id: Number(document.getElementById('tco-car-select').value),
+                years: Number(document.getElementById('tco-years').value),
+                annual_km: Number(document.getElementById('tco-km').value)
+            };
+
+            const res = await fetch('/api/decision/tco', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            document.getElementById('tco-results').classList.remove('hidden');
+            document.getElementById('tco-total-val').innerText = `${data.tco_summary.total_tco.toLocaleString()} ريال`;
+            document.getElementById('tco-monthly-val').innerText = `التكلفة الشهرية: ${data.tco_summary.monthly_tco.toLocaleString()} ريال | تكلفة الكيلومتر: ${data.tco_summary.cost_per_km} هللة`;
+
+            const breakdown = document.getElementById('tco-breakdown');
+            breakdown.innerHTML = `
+                <div class="bg-slate-950 p-3 rounded-xl"><span class="text-slate-400 block">سعر الشراء</span><span class="font-bold">${data.tco_summary.purchase_price.toLocaleString()} ر.س</span></div>
+                <div class="bg-slate-950 p-3 rounded-xl"><span class="text-slate-400 block">الاستهلاك وإعادة البيع</span><span class="font-bold text-amber-400">${data.tco_summary.net_depreciation.toLocaleString()} ر.س</span></div>
+                <div class="bg-slate-950 p-3 rounded-xl"><span class="text-slate-400 block">تكلفة الوقود</span><span class="font-bold text-blue-400">${data.tco_summary.total_fuel_cost.toLocaleString()} ر.س</span></div>
+                <div class="bg-slate-950 p-3 rounded-xl"><span class="text-slate-400 block">الصيانة الدورية</span><span class="font-bold">${data.tco_summary.total_maintenance_cost.toLocaleString()} ر.س</span></div>
+                <div class="bg-slate-950 p-3 rounded-xl"><span class="text-slate-400 block">التأمين الشامل</span><span class="font-bold">${data.tco_summary.total_insurance_cost.toLocaleString()} ر.س</span></div>
+                <div class="bg-slate-950 p-3 rounded-xl"><span class="text-slate-400 block">قيمة إعادة البيع المتوقعة</span><span class="font-bold text-emerald-400">${data.tco_summary.resale_value.toLocaleString()} ر.س</span></div>
+            `;
+        }
+
+        async function runWhatIf() {
+            const payload = {
+                base_budget: Number(document.getElementById('wf-base-budget').value),
+                new_budget: Number(document.getElementById('wf-new-budget').value),
+                base_km: Number(document.getElementById('wf-base-km').value),
+                new_km: Number(document.getElementById('wf-new-km').value)
+            };
+
+            const res = await fetch('/api/decision/what-if', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            document.getElementById('whatif-results').classList.remove('hidden');
+            document.getElementById('whatif-output').innerText = data.simulation.recommendation;
+        }
+
+        function renderComparison() {
+            const ids = ['comp-1', 'comp-2', 'comp-3', 'comp-4'].map(id => document.getElementById(id).value).filter(Boolean);
+            const selectedCars = allCars.filter(c => ids.includes(String(c.id)));
+
+            if (selectedCars.length < 2) {
+                alert('الرجاء اختيار سيارتين على الأقل للمقارنة.');
+                return;
+            }
+
+            let html = `<table class="w-full text-right text-sm bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+                <thead class="bg-slate-800 text-slate-300">
+                    <tr>
+                        <th class="p-4">المعيار</th>
+                        ${selectedCars.map(c => `<th class="p-4">${c.name}</th>`).join('')}
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800">
+                    <tr><td class="p-4 font-bold">السعر</td>${selectedCars.map(c => `<td class="p-4 text-emerald-400 font-bold">${c.price.toLocaleString()} ر.س</td>`).join('')}</tr>
+                    <tr><td class="p-4 font-bold">الفئة</td>${selectedCars.map(c => `<td class="p-4">${c.category}</td>`).join('')}</tr>
+                    <tr><td class="p-4 font-bold">نوع المحرك</td>${selectedCars.map(c => `<td class="p-4">${c.fuel_type}</td>`).join('')}</tr>
+                    <tr><td class="p-4 font-bold">استهلاك الوقود</td>${selectedCars.map(c => `<td class="p-4">${c.fuel_economy} كم/لتر</td>`).join('')}</tr>
+                    <tr><td class="p-4 font-bold">الاعتمادية</td>${selectedCars.map(c => `<td class="p-4 text-amber-400">${c.reliability_score}/10</td>`).join('')}</tr>
+                    <tr><td class="p-4 font-bold">الأمان</td>${selectedCars.map(c => `<td class="p-4">${c.safety_score}/10</td>`).join('')}</tr>
+                </tbody>
+            </table>`;
+
+            document.getElementById('comparison-output').innerHTML = html;
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
