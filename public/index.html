@@ -114,6 +114,7 @@ body.auth header,body.auth footer{display:none}
 .lbox{width:min(320px,86%);text-align:center;color:#e8eefb}.lbox img{height:70px;animation:float 2.4s ease-in-out infinite}.lbox .pbar i{transition:width 1.4s linear}
 @media(max-width:560px){.logo img{height:34px}.logo{font-size:1rem}#userChip,body.in #userChip,body.in #navStart{display:none}header .btn{padding:8px 14px;font-size:.9rem}.nav>div:last-child{gap:6px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{header,footer,.btn,.tabs{display:none!important}body{background:#fff!important;color:#111!important}.view{display:none!important}#v-tools{display:block!important}.card{break-inside:avoid;box-shadow:none!important;border:1px solid #bbb!important}}
 </style>
 </head>
 <body>
@@ -157,6 +158,7 @@ body.auth header,body.auth footer{display:none}
     </div>
     <div class="hero-art"><div class="glow"></div><img class="fade" data-logo="md" alt="AutoDecision AI"></div>
   </div>
+  <div class="grid g2" style="margin:18px 0"><button class="btn" id="openCatalog">🚘 قاعدة بيانات السيارات (80+)</button><button class="btn ghost" id="openTools">📊 أدوات التحليل المتقدم</button></div>
   <div class="pillars"><div class="pillar"><i>🎯</i>تحليل احتياجات المستخدم</div><div class="pillar"><i>⚖️</i>مقارنة ذكية</div><div class="pillar"><i>✨</i>توصيات مخصصة</div><div class="pillar"><i>🧭</i>دعم القرار</div></div>
   <div class="grid g3">
     <div class="card"><div class="ico">📝</div><h3>1. أدخل احتياجاتك</h3><p>الميزانية، الاستخدام، الأسرة، المسافة والمحرك المفضل.</p></div>
@@ -194,6 +196,21 @@ body.auth header,body.auth footer{display:none}
   <div class="pane" id="p-cmp"></div>
   <div class="pane" id="p-dash"></div>
   <button class="btn ghost" onclick="App.go('input')" style="margin-top:14px">← تعديل البيانات</button>
+</section>
+<section class="view" id="v-catalog">
+ <h2 class="t">قاعدة بيانات السيارات</h2><p class="sub">ابحث في أكثر من 80 طرازاً، وصفِّ النتائج حسب النوع والمحرك والسعر. الأسعار والتقييمات تقديرية لأغراض المشروع.</p>
+ <div class="card grid g3" style="margin-bottom:14px"><input id="carSearch" placeholder="ابحث باسم السيارة أو الشركة..."><select id="carType"><option value="">كل الفئات</option><option>سيدان</option><option>SUV</option><option>SUV عائلية</option><option>هاتشباك</option><option>MPV</option><option>فان</option></select><select id="carFuel"><option value="">كل المحركات</option><option>بنزين</option><option>هايبرد</option><option>كهربائي</option></select><input id="carMaxPrice" type="number" placeholder="أعلى سعر (ريال)"></div>
+ <div class="meta" id="catalogCount" style="margin:8px 0"></div><div id="catalogGrid" class="grid g3"></div>
+ <button class="btn ghost" onclick="App.go('home')" style="margin-top:16px">العودة للرئيسية</button>
+</section>
+<section class="view" id="v-tools">
+ <h2 class="t">مركز التحليل المتقدم</h2><p class="sub">أدوات تساعدك على فهم التكلفة والمفاضلة بين البدائل قبل اتخاذ القرار.</p>
+ <div class="grid g2">
+  <div class="card"><h3>تحليل التكلفة الكلية TCO</h3><p class="meta">احسب التكلفة التقديرية لامتلاك السيارة خلال عدة سنوات.</p><label class="l">السيارة</label><select id="tcoCar"></select><label class="l">مدة الملكية (سنوات)</label><input id="tcoYears" type="number" min="1" max="10" value="5"><label class="l">المسافة السنوية (كم)</label><input id="tcoKm" type="number" value="20000"><label class="l">سعر الوقود (ريال/لتر) أو معامل الطاقة</label><input id="tcoFuelPrice" type="number" step="0.1" value="2.18"><button class="btn" id="calcTco">احسب TCO</button><div id="tcoResult"></div></div>
+  <div class="card"><h3>محاكاة What-if</h3><p class="meta">غيّر ظروف الاستخدام والميزانية وشاهد كيف تتغير المفاضلة.</p><label class="l">السيارة المراد اختبارها</label><select id="whatCar"></select><label class="l">تغير سعر الوقود (%)</label><input id="whatFuel" type="number" value="20"><label class="l">تغير المسافة السنوية (%)</label><input id="whatKm" type="number" value="30"><label class="l">تغير الميزانية (%)</label><input id="whatBudget" type="number" value="-10"><button class="btn" id="runWhat">شغّل السيناريو</button><div id="whatResult"></div></div>
+  <div class="card"><h3>المقارنة المتقدمة</h3><p class="meta">قارن حتى أربع سيارات عبر السعر والراحة والأمان والاعتمادية والتكلفة.</p><select id="advCars" multiple size="7" style="min-height:150px"></select><button class="btn" id="runAdv">إنشاء المقارنة</button><div id="advResult" class="scroll"></div></div>
+  <div class="card"><h3>التحليل الذكي والتقرير النهائي</h3><p class="meta">تفسير آلي قابل للتفسير مبني على بيانات السيارة ومدخلاتك، وليس اتصالاً بنموذج ذكاء اصطناعي خارجي.</p><button class="btn" id="runAi">أنشئ التحليل والتوصية</button><button class="btn ghost" id="printReport">طباعة / حفظ تقرير القرار PDF</button><div id="aiResult"></div></div>
+ </div><button class="btn ghost" onclick="App.go('home')" style="margin-top:16px">العودة للرئيسية</button>
 </section>
 <section class="view" id="v-history">
   <h2 class="t">سجل قراراتي</h2><p class="sub">عمليات التحليل السابقة المحفوظة في قاعدة البيانات.</p>
@@ -275,7 +292,7 @@ const App={
   try{(push?history.pushState:history.replaceState).call(history,{v},'')}catch(e){}
  },
  init(){
-  $('#roadmap').innerHTML=Object.values(Modules).map(m=>`<span class="tag">🔒 ${m.title}</span>`).join('');
+  $('#roadmap').innerHTML='<span class="tag">قاعدة سيارات 80+ · TCO · What-if · مقارنة متقدمة · تقرير قابل للطباعة</span>';
   $('#prios').innerHTML=PRIORITIES.map(p=>`<div class="pr"><span>${p.ico} ${p.n}</span><input type="range" min="1" max="5" value="3" data-k="${p.k}"><em>3</em></div>`).join('');
   $$('#prios input').forEach(i=>i.oninput=()=>{State.weights[i.dataset.k]=+i.value;i.nextElementSibling.textContent=i.value});
   $$('.opts').forEach(g=>g.onclick=e=>{const b=e.target.closest('.opt');if(!b)return;
@@ -472,6 +489,20 @@ async function showHistory(){
 $('#historyBtn').onclick=showHistory;
 
 App.init();Extras.init();
+
+// ===== Advanced academic decision-support modules =====
+const Advanced={cars:[],selected:null,fmt:n=>Number(n||0).toLocaleString('en-US'),
+ async load(){try{const d=await API.request('/api/cars');this.cars=d.cars||[];this.renderCatalog();this.fillSelects();}catch(e){console.error(e)}},
+ renderCatalog(){const q=($('#carSearch').value||'').trim().toLowerCase(),t=$('#carType').value,f=$('#carFuel').value,m=Number($('#carMaxPrice').value)||Infinity;const a=this.cars.filter(c=>(!q||c.name.toLowerCase().includes(q)||c.type.toLowerCase().includes(q))&&(!t||c.type===t)&&(!f||c.fuel===f)&&c.price<=m);$('#catalogCount').textContent=`عرض ${a.length} من أصل ${this.cars.length} سيارة`;$('#catalogGrid').innerHTML=a.map(c=>`<article class="card"><h3>${c.name}</h3><div class="meta">${c.type} · ${c.fuel} · ${c.seats} مقاعد</div><h3>${this.fmt(c.price)} ريال</h3><div class="meta">الراحة ${c.comfort}/10 · الأمان ${c.safety}/10 · الاعتمادية ${c.reliability}/10</div><p class="meta">${c.description||''}</p><button class="btn ghost" data-pick="${c.id}">استخدمها في التحليل</button></article>`).join('')||'<div class="card">لا توجد نتائج مطابقة.</div>';$('#catalogGrid').querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{const c=this.cars.find(x=>x.id===Number(b.dataset.pick));if(c){$('#budget').value=Math.max(Number($('#budget').value)||0,c.price);App.go('input')}});},
+ fillSelects(){const opts=this.cars.map(c=>`<option value="${c.id}">${c.name} — ${this.fmt(c.price)} ريال</option>`).join('');['tcoCar','whatCar'].forEach(id=>$('#'+id).innerHTML=opts);$('#advCars').innerHTML=opts;},
+ calcTco(){const c=this.cars.find(x=>x.id===Number($('#tcoCar').value));if(!c)return;const y=Math.min(10,Math.max(1,Number($('#tcoYears').value)||5)),km=Math.max(0,Number($('#tcoKm').value)||20000),fuelP=Math.max(0,Number($('#tcoFuelPrice').value)||0);const rate=c.fuel==='كهربائي'?0.19:c.fuel==='هايبرد'?0.055:0.085;const energy=km*y*rate*fuelP;const maint=c.price*.012*y,insurance=c.price*.025*y,registration=150*y, depreciation=c.price*(c.fuel==='كهربائي'?.48:.38);const total=c.price+energy+maint+insurance+registration;$('#tcoResult').innerHTML=`<div class="card" style="margin-top:12px"><h3>التكلفة التقديرية خلال ${y} سنوات</h3><h2>${this.fmt(total)} ريال</h2><p>الشراء: ${this.fmt(c.price)} · الطاقة: ${this.fmt(energy)} · الصيانة: ${this.fmt(maint)} · التأمين: ${this.fmt(insurance)} · الرسوم: ${this.fmt(registration)}</p><p class="meta">قيمة إعادة البيع المفترضة: ${this.fmt(c.price-depreciation)} ريال. التكلفة بعد خصمها: ${this.fmt(total-(c.price-depreciation))} ريال.</p><small>افتراضات تعليمية مبسطة وليست عرض تأمين أو صيانة أو توقع سعر سوق.</small></div>`;},
+ whatIf(){const c=this.cars.find(x=>x.id===Number($('#whatCar').value));if(!c)return;const fuel=Number($('#whatFuel').value)||0,km=Number($('#whatKm').value)||0,budget=Number($('#whatBudget').value)||0;const base=c.price*.085*20000,scenario=base*(1+fuel/100)*(1+km/100),budgetAfter=c.price*(1+budget/100);$('#whatResult').innerHTML=`<div class="card" style="margin-top:12px"><h3>${c.name}</h3><p>تغير تكلفة الطاقة السنوية: <b>${this.fmt(scenario-base)} ريال</b> (${fuel>=0?'+':''}${fuel}% وقود و${km>=0?'+':''}${km}% مسافة).</p><p>الميزانية بعد التغيير: <b>${this.fmt(budgetAfter)} ريال</b> — ${budgetAfter>=c.price?'السيارة ضمن الميزانية المعدلة':'السيارة تتجاوز الميزانية المعدلة'}.</p><small>محاكاة حساسية مبسطة وليست توقعاً فعلياً لاستهلاك السيارة.</small></div>`;},
+ compare(){const ids=[...$('#advCars').selectedOptions].slice(0,4).map(o=>Number(o.value));if(ids.length<2){$('#advResult').innerHTML='اختر سيارتين على الأقل.';return}const cs=ids.map(id=>this.cars.find(c=>c.id===id)).filter(Boolean);const keys=[['السعر','price'],['الراحة','comfort'],['الأمان','safety'],['الاعتمادية','reliability'],['اقتصاد الطاقة','economy'],['الأداء','performance']];$('#advResult').innerHTML=`<table><tr><th>المعيار</th>${cs.map(c=>`<th>${c.name}</th>`).join('')}</tr>${keys.map(([n,k])=>`<tr><td>${n}</td>${cs.map(c=>`<td>${k==='price'?this.fmt(c[k])+' ريال':c[k]+'/10'}</td>`).join('')}</tr>`).join('')}</table>`;},
+ ai(){const ids=[...$('#advCars').selectedOptions].slice(0,4).map(o=>Number(o.value));const cs=(ids.length?ids:this.cars.filter(c=>c.price<=Number($('#budget').value||120000)).slice(0,4));if(!cs.length)return;const sorted=[...cs].sort((a,b)=>(b.comfort+b.reliability+b.safety+b.economy)-(a.comfort+a.reliability+a.safety+a.economy));const best=sorted[0];$('#aiResult').innerHTML=`<div class="card" style="margin-top:12px"><h3>التوصية: ${best.name}</h3><p>اختيرت لأنها تحقق توازناً أعلى ضمن السيارات المحددة في الراحة (${best.comfort}/10)، الاعتمادية (${best.reliability}/10)، الأمان (${best.safety}/10)، والاقتصاد (${best.economy}/10).</p><p>السعر التقديري: ${this.fmt(best.price)} ريال. عدد المقاعد: ${best.seats}. نوع المحرك: ${best.fuel}.</p><p class="meta">منهج التحليل: تجميع درجات معيارية متساوية للأبعاد الأربعة. النتيجة مساعدة لاتخاذ القرار وليست حكماً نهائياً أو ذكاءً اصطناعياً توليدياً.</p></div>`;},
+ init(){const bind=(id,fn)=>$('#'+id).addEventListener('click',fn);bind('openCatalog',()=>{App.go('catalog');this.load()});bind('openTools',()=>{App.go('tools');this.load()});['carSearch','carType','carFuel','carMaxPrice'].forEach(id=>$('#'+id).addEventListener('input',()=>this.renderCatalog()));bind('calcTco',()=>this.calcTco());bind('runWhat',()=>this.whatIf());bind('runAdv',()=>this.compare());bind('runAi',()=>this.ai());bind('printReport',()=>{this.ai();setTimeout(()=>window.print(),150)});}
+};
+Advanced.init();
+
 </script>
 </body>
 </html>
