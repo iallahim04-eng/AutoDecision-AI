@@ -1,0 +1,10 @@
+[
+ {"id":1,"name":"تويوتا كورولا","type":"سيدان","fuel":"بنزين","price":85000,"seats":5,"safety":8,"reliability":10,"economy":7,"comfort":7,"performance":6,"city":8,"travel":8,"year":2025,"description":"سيدان عملية للاستخدام اليومي والمدينة."},
+ {"id":2,"name":"تويوتا كامري هايبرد","type":"سيدان","fuel":"هايبرد","price":125000,"seats":5,"safety":9,"reliability":9,"economy":9,"comfort":8,"performance":7,"city":9,"travel":9,"year":2025,"description":"سيدان متوسطة بمحرك هجين واقتصاد جيد."},
+ {"id":3,"name":"هيونداي توسان","type":"SUV","fuel":"بنزين","price":115000,"seats":5,"safety":8,"reliability":8,"economy":6,"comfort":8,"performance":7,"city":8,"travel":9,"year":2025,"description":"سيارة رياضية متعددة الاستخدامات بخمسة مقاعد."},
+ {"id":4,"name":"كيا سورينتو","type":"SUV عائلية","fuel":"بنزين","price":150000,"seats":7,"safety":9,"reliability":8,"economy":5,"comfort":9,"performance":8,"city":7,"travel":9,"year":2025,"description":"سيارة عائلية واسعة بسبعة مقاعد."},
+ {"id":5,"name":"تويوتا RAV4 هايبرد","type":"SUV","fuel":"هايبرد","price":140000,"seats":5,"safety":9,"reliability":9,"economy":9,"comfort":8,"performance":7,"city":9,"travel":9,"year":2025,"description":"SUV هجينة للاستخدام اليومي والسفر."},
+ {"id":6,"name":"نيسان صني","type":"سيدان اقتصادية","fuel":"بنزين","price":60000,"seats":5,"safety":6,"reliability":7,"economy":8,"comfort":5,"performance":4,"city":9,"travel":5,"year":2025,"description":"سيدان اقتصادية للمدينة."},
+ {"id":7,"name":"تسلا موديل 3","type":"سيدان","fuel":"كهربائي","price":175000,"seats":5,"safety":10,"reliability":7,"economy":10,"comfort":8,"performance":10,"city":10,"travel":6,"year":2025,"description":"سيارة كهربائية بأداء وتسارع مرتفعين."},
+ {"id":8,"name":"هوندا أكورد","type":"سيدان","fuel":"بنزين","price":118000,"seats":5,"safety":9,"reliability":9,"economy":7,"comfort":9,"performance":8,"city":8,"travel":9,"year":2025,"description":"سيدان مريحة مناسبة للمدينة والطرق الطويلة."}
+]
