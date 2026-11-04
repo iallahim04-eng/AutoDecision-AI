@@ -1,7 +1,7 @@
 {
   "name": "autodecision-ai",
   "version": "2.0.0",
-  "description": "Intelligent Car Decision Support System - Qassim University Graduation Project",
+  "description": "Intelligent Car Decision Support System",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
