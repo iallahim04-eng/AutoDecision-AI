@@ -1,14 +1,18 @@
 {
   "name": "autodecision-ai",
-  "version": "1.0.0",
-  "private": true,
-  "description": "نظام دعم القرار الذكي لاختيار السيارة المناسبة",
+  "version": "2.0.0",
+  "description": "Intelligent Car Decision Support System - Qassim University Graduation Project",
+  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "test": "node scripts/smoke-test.js"
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "sqlite3": "^5.1.7"
   },
   "engines": {
-    "node": ">=22.5.0"
+    "node": ">=18.0.0"
   }
 }
