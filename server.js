@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// --- AUTH API ---
+// --- AUTH: LOGIN API ---
 app.post('/api/auth/login', (req, res) => {
   const { email, password } = req.body;
   db.get(`SELECT * FROM users WHERE email = ?`, [email], async (err, user) => {
@@ -24,6 +24,35 @@ app.post('/api/auth/login', (req, res) => {
 
     res.json({ success: true, user: { id: user.id, name: user.name, email: user.email } });
   });
+});
+
+// --- AUTH: REGISTER API ---
+app.post('/api/auth/register', async (req, res) => {
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: 'الرجاء إدخال كافة البيانات المطلوبة' });
+  }
+
+  try {
+    db.get(`SELECT * FROM users WHERE email = ?`, [email], async (err, existingUser) => {
+      if (err) return res.status(500).json({ error: 'خطأ في قاعدة البيانات' });
+      if (existingUser) {
+        return res.status(400).json({ error: 'البريد الإلكتروني مستخدم مسبقاً' });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 8);
+      db.run(`INSERT INTO users (name, email, password) VALUES (?, ?, ?)`, [name, email, hashedPassword], function(err2) {
+        if (err2) return res.status(500).json({ error: 'فشل إنشاء الحساب' });
+        res.json({ 
+          success: true, 
+          user: { id: this.lastID, name, email },
+          message: 'تم إنشاء الحساب بنجاح'
+        });
+      });
+    });
+  } catch (e) {
+    res.status(500).json({ error: 'حدث خطأ غير متوقع' });
+  }
 });
 
 // --- CARS API ---
@@ -149,7 +178,7 @@ function processScoring(cars, inputs, w, res) {
   });
 }
 
-// --- TCO CALCULATOR API (Complete Financial Breakdown) ---
+// --- TCO CALCULATOR API ---
 app.post('/api/decision/tco', (req, res) => {
   const { car_id, years, annual_km } = req.body;
 
@@ -158,23 +187,20 @@ app.post('/api/decision/tco', (req, res) => {
 
     const numYears = Number(years) || 5;
     const price = car.price;
-    const downPayment = price * 0.20; // 20% دفعة مقدمة افتراضية
+    const downPayment = price * 0.20;
     const loanAmount = price - downPayment;
-    const totalFinancingCost = loanAmount * (1 + (0.045 * numYears)); // مرابحة 4.5% سنوياً
+    const totalFinancingCost = loanAmount * (1 + (0.045 * numYears));
     const actualPurchaseCost = downPayment + totalFinancingCost;
 
     const km = Number(annual_km) || 20000;
-    // سعر لتر البنزين 2.33 ريال افتراضياً
     const fuelCostAnnual = (km / car.fuel_economy) * 2.33;
     const totalFuelCost = fuelCostAnnual * numYears;
     
-    // الصيانة الدورية السنوية (تزداد تدريجياً حسب السنوات)
     let totalMaintCost = 0;
     for (let y = 1; y <= numYears; y++) {
       totalMaintCost += (2000 + (y * 300));
     }
 
-    // التأمين الشامل السنوي (تقريباً 2.5% من سعر السيارة يتناقص سنوياً)
     let totalInsCost = 0;
     let currValIns = price;
     for (let y = 1; y <= numYears; y++) {
@@ -182,16 +208,14 @@ app.post('/api/decision/tco', (req, res) => {
       currValIns *= 0.88;
     }
 
-    // تكلفة الإطارات والبطاريات التراكمية
     const totalTireCost = numYears >= 4 ? 2400 : 1200;
 
-    // استهلاك وانخفاض قيمة السيارة (Depreciation)
     let resaleValue = price;
     for (let y = 1; y <= numYears; y++) {
-      let depRate = y === 1 ? 0.15 : 0.09; // انخفاض أول سنة 15% ثم 9% سنوياً
+      let depRate = y === 1 ? 0.15 : 0.09;
       resaleValue = resaleValue * (1 - depRate);
     }
-    resaleValue = Math.max(resaleValue, price * 0.32); // لا تقل عن 32% من السعر الأصلي
+    resaleValue = Math.max(resaleValue, price * 0.32);
 
     const netDepreciation = actualPurchaseCost - resaleValue;
     const totalTCO = netDepreciation + totalFuelCost + totalMaintCost + totalInsCost + totalTireCost;
