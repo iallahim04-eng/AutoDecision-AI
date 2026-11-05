@@ -115,7 +115,7 @@ app.get('/api/cars/:id', (req, res) => {
   });
 });
 
-// --- DECISION SUPPORT ENGINE (MCDM - Weighted Scoring) ---
+// --- DECISION SUPPORT ENGINE (MCDM) ---
 app.post('/api/decision/analyze', (req, res) => {
   const { budget, family_size, annual_km, use_case, fuel_preference, weights } = req.body;
   const w = weights || { price: 0.25, safety: 0.2, reliability: 0.2, economy: 0.15, comfort: 0.1, performance: 0.1 };
@@ -178,49 +178,68 @@ function processScoring(cars, inputs, w, res) {
   });
 }
 
-// --- TCO CALCULATOR API ---
+// --- TCO CALCULATOR API (Precise Financial Calculations) ---
 app.post('/api/decision/tco', (req, res) => {
-  const { car_id, years, annual_km } = req.body;
+  const { car_id, years, annual_km, include_financing } = req.body;
 
   db.get(`SELECT * FROM cars WHERE id = ?`, [car_id], (err, car) => {
     if (err || !car) return res.status(404).json({ error: 'السيارة غير موجودة' });
 
     const numYears = Number(years) || 5;
     const price = car.price;
-    const downPayment = price * 0.20;
-    const loanAmount = price - downPayment;
-    const totalFinancingCost = loanAmount * (1 + (0.045 * numYears));
-    const actualPurchaseCost = downPayment + totalFinancingCost;
-
-    const km = Number(annual_km) || 20000;
-    const fuelCostAnnual = (km / car.fuel_economy) * 2.33;
-    const totalFuelCost = fuelCostAnnual * numYears;
     
-    let totalMaintCost = 0;
-    for (let y = 1; y <= numYears; y++) {
-      totalMaintCost += (2000 + (y * 300));
+    // التمويل اختياري
+    let actualPurchaseCost = price;
+    let downPayment = price;
+    let totalFinancingCost = 0;
+    
+    if (include_financing) {
+      downPayment = price * 0.20;
+      const loanAmount = price - downPayment;
+      totalFinancingCost = loanAmount * (1 + (0.045 * numYears));
+      actualPurchaseCost = downPayment + totalFinancingCost;
     }
 
+    const km = Number(annual_km) || 20000;
+    
+    // تسعير الوقود تفاضلي حسب نوع المحرك
+    let fuelPricePerLiter = 2.33; // بنزين 91 افتراضي
+    if (car.fuel_type === 'ديزل') fuelPricePerLiter = 1.15;
+    if (car.fuel_type === 'هجين') fuelPricePerLiter = 2.33; // كفاءة مضاعفة في استهلاك اللتر
+
+    const fuelCostAnnual = (km / car.fuel_economy) * fuelPricePerLiter;
+    const totalFuelCost = fuelCostAnnual * numYears;
+    
+    // الصيانة الدورية تختلف بحسب الفئة والسعر
+    let baseMaint = car.price > 150000 ? 3500 : 2000;
+    let totalMaintCost = 0;
+    for (let y = 1; y <= numYears; y++) {
+      totalMaintCost += (baseMaint + (y * 250));
+    }
+
+    // التأمين الشامل التقديري يتناقص سنوياً
     let totalInsCost = 0;
     let currValIns = price;
     for (let y = 1; y <= numYears; y++) {
-      totalInsCost += (currValIns * 0.025);
+      totalInsCost += (currValIns * 0.022);
       currValIns *= 0.88;
     }
 
-    const totalTireCost = numYears >= 4 ? 2400 : 1200;
+    const totalTireCost = numYears >= 4 ? 2600 : 1300;
 
+    // انخفاض القيمة وإعادة البيع
     let resaleValue = price;
     for (let y = 1; y <= numYears; y++) {
       let depRate = y === 1 ? 0.15 : 0.09;
       resaleValue = resaleValue * (1 - depRate);
     }
-    resaleValue = Math.max(resaleValue, price * 0.32);
+    resaleValue = Math.max(resaleValue, price * 0.30);
 
     const netDepreciation = actualPurchaseCost - resaleValue;
     const totalTCO = netDepreciation + totalFuelCost + totalMaintCost + totalInsCost + totalTireCost;
     const annualTCO = totalTCO / numYears;
     const monthlyTCO = annualTCO / 12;
+    // التكلفة بالريال لكل كيلومتر (وليس هللة)
     const costPerKm = totalTCO / (km * numYears);
 
     res.json({
@@ -238,30 +257,43 @@ app.post('/api/decision/tco', (req, res) => {
         total_tco: Math.round(totalTCO),
         annual_tco: Math.round(annualTCO),
         monthly_tco: Math.round(monthlyTCO),
-        cost_per_km: Number(costPerKm.toFixed(2))
+        cost_per_km: Number(costPerKm.toFixed(2)) // بالريال
       }
     });
   });
 });
 
-// --- WHAT-IF SIMULATION API ---
+// --- WHAT-IF SIMULATION API (Real Re-evaluation) ---
 app.post('/api/decision/what-if', (req, res) => {
   const { base_budget, new_budget, base_km, new_km } = req.body;
   const budgetDelta = Number(new_budget) - Number(base_budget);
   const kmDelta = Number(new_km) - Number(base_km);
   
-  let recommendationNote = '';
-  if (budgetDelta > 0) {
-    recommendationNote = `زيادة الميزانية بمقدار ${budgetDelta.toLocaleString()} ريال تتيح لك الانتقال إلى فئة أعلى من السيارات الفاخرة أو ذات الاعتمادية الفائقة ومستويات أمان أعلى، مع خيارات محركات هجينة أكثر توفيراً.`;
-  } else if (budgetDelta < 0) {
-    recommendationNote = `تقليل الميزانية بمقدار ${Math.abs(budgetDelta).toLocaleString()} ريال يحتم عليك التركيز على السيارات الاقتصادية المدمجة (فئات السيدان الصغيرة أو الـ Crossover الصغيرة) مع توفير ملحوظ في تكاليف التمويل.`;
-  } else {
-    recommendationNote = `تثبيت الميزانية مع تعديل المسافة السنوية (${kmDelta > 0 ? 'زيادة' : 'تقليل'} الاستهلاك بقيمة ${Math.abs(kmDelta)} كم) يؤثر بشكل مباشر على تكاليف استهلاك الوقود والصيانة الدورية ضمن حسابات TCO.`;
-  }
+  // إعادة تقييم فعلية للسيارات المتاحة تحت الميزانية الجديدة
+  db.all(`SELECT COUNT(*) as available_count, AVG(price) as avg_price FROM cars WHERE price <= ?`, [Number(new_budget)], (err, row) => {
+    let availableCount = row ? row.available_count : 0;
+    let avgPrice = row ? Math.round(row.avg_price || 0) : 0;
 
-  res.json({
-    success: true,
-    simulation: { budget_delta: budgetDelta, km_delta: kmDelta, recommendation: recommendationNote }
+    let recommendationNote = `عند تعديل الميزانية من ${Number(base_budget).toLocaleString()} ر.س إلى ${Number(new_budget).toLocaleString()} ر.س (${budgetDelta >= 0 ? '+' : ''}${budgetDelta.toLocaleString()} ر.س)، وتغيير المسافة السنوية إلى ${Number(new_km).toLocaleString()} كم: `;
+    
+    if (budgetDelta > 0) {
+      recommendationNote += `اتاحت لك الزيادة الوصول إلى عدد ${availableCount} سيارة مطابقة في القاعدة بمتوسط أسعار يقدر بـ ${avgPrice.toLocaleString()} ر.س، مع تحسن ملحوظ في خيارات الرفاهية والأمان وتقليل تكلفة التشغيل للمسافات الأطول.`;
+    } else if (budgetDelta < 0) {
+      recommendationNote += `أدى تخفيض الميزانية إلى حصر الخيارات في ${availableCount} سيارة اقتصادية، مما يقلل تكلفة التمويل ولكنه يرفع تكلفة الصيانة النسبية نسبة للاستهلاك (${Number(new_km).toLocaleString()} كم سنويًا).`;
+    } else {
+      recommendationNote += `تثبيت الميزانية مع تعديل معدل الحركة السنوي (${Math.abs(kmDelta)} كم) يؤثر حصرياً على استهلاك الوقود الإجمالي وتآكل الإطارات بنسبة مقدرة مالياً.`;
+    }
+
+    res.json({
+      success: true,
+      simulation: { 
+        budget_delta: budgetDelta, 
+        km_delta: kmDelta, 
+        new_available_cars: availableCount,
+        average_matched_price: avgPrice,
+        recommendation: recommendationNote 
+      }
+    });
   });
 });
 
