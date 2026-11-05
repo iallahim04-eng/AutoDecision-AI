@@ -242,5 +242,6 @@ function renderComparison(){const ids=['comp-1','comp-2','comp-3','comp-4'].map(
 function updateReportTab(){const r=document.getElementById('report-dynamic-recs'),t=document.getElementById('report-dynamic-tco');if(lastAnalysisResult?.topCars?.length){const c=lastAnalysisResult.topCars[0];r.innerHTML=`<strong>السيارة المرشحة الأولى: ${esc(c.name)}</strong><br>السعر: ${money(c.price)}<br>نسبة التوافق: ${c.matchPercentage}%<br>${esc(c.reasons?.[0]||'وفق نتيجة التقييم متعدد المعايير.')}`}if(lastTcoResult?.tco_summary){const s=lastTcoResult.tco_summary;t.innerHTML=`السيارة: <strong>${esc(lastTcoResult.car.name)}</strong><br>إجمالي TCO: <strong>${money(s.total_tco)}</strong><br>التكلفة الشهرية: ${money(s.monthly_tco)}<br>تكلفة الكيلومتر: ${s.cost_per_km} ريال/كم`}}
 setTheme();
 </script>
+  <script src="/assistant.js"></script>
 </body>
 </html>
