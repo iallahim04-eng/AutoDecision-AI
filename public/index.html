@@ -104,8 +104,8 @@ td{color:var(--text)}
 @media(max-width:1100px){.sidebar{width:215px}.main{margin-right:215px;width:calc(100% - 215px)}.car-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.sidebar{transform:translateX(100%);transition:.25s;width:260px}.sidebar.open{transform:translateX(0)}.main{margin:0;width:100%}.topbar{padding:0 16px;height:62px}.mobile-menu{display:inline-grid;place-items:center}.content{padding:22px 15px 45px}.page-head{display:block}.page-head .btn{margin-top:14px}.two,.three{grid-template-columns:1fr}.car-grid{grid-template-columns:1fr}.stats{gap:10px}.stat strong{font-size:20px}.card{padding:16px}.result-grid{grid-template-columns:1fr}.field-grid{grid-template-columns:1fr}.top-title{font-size:14px}.user-chip span{display:none}}
 
-.brand-logo{width:46px;height:46px;object-fit:contain;flex:0 0 auto}
-.auth-card .brand-logo{width:58px;height:58px}
+.brand-logo{display:block;width:46px;height:46px;flex:0 0 auto;border-radius:10px;overflow:hidden;background-image:url("https://cdn.imagetourls.com/uploads/tyImg/dLqJytLP.png");background-repeat:no-repeat;background-position:center top;background-size:auto 120px;box-shadow:0 2px 8px #0b315522}
+.auth-card .brand-logo{width:58px;height:58px;background-size:auto 151px}
 .darb-hero{position:relative;overflow:hidden;border-radius:22px;margin-bottom:26px;min-height:245px;background:#eaf2fb;box-shadow:var(--shadow)}
 .darb-hero>img{display:block;width:100%;height:auto;object-fit:contain}
 .darb-hero-copy{position:absolute;right:5.5%;top:50%;transform:translateY(-50%);max-width:48%;color:#0a3156;text-shadow:0 1px 8px #ffffffa8}
@@ -119,7 +119,7 @@ td{color:var(--text)}
 <body>
 <div id="auth" class="auth">
   <div class="auth-card">
-    <div class="brand"><img class="brand-logo" src="/darb-logo.svg" alt="شعار درب"><div><strong>دَرْب</strong><small>نظام دعم القرار الذكي</small></div></div>
+    <div class="brand"><span class="brand-logo" role="img" aria-label="شعار دَرْب"></span><div><strong>دَرْب</strong><small>نظام دعم القرار الذكي</small></div></div>
     <h2 id="auth-heading">مرحباً بك في المنصة</h2>
     <p class="subtitle">كلية إدارة الأعمال · نظم المعلومات الإدارية · جامعة القصيم</p>
     <div class="field" style="margin-bottom:13px"><label>البريد الإلكتروني</label><input id="auth-email" type="email" placeholder="name@example.com" value="demo@autodecision.ai"></div>
@@ -133,7 +133,7 @@ td{color:var(--text)}
 
 <div class="layout hidden" id="app">
 <aside class="sidebar" id="sidebar">
-  <div class="brand"><img class="brand-logo" src="/darb-logo.svg" alt="شعار درب"><div><strong>دَرْب</strong><small>SMART CAR DECISION SYSTEM</small></div></div>
+  <div class="brand"><span class="brand-logo" role="img" aria-label="شعار دَرْب"></span><div><strong>دَرْب</strong><small>SMART CAR DECISION SYSTEM</small></div></div>
   <div class="nav-label">القائمة الرئيسية</div>
   <nav class="nav">
     <button class="active" data-tab="dashboard" onclick="switchTab('dashboard')"><i class="fa-solid fa-grid-2"></i> لوحة التحكم</button>
