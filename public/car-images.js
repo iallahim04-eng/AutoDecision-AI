@@ -82,7 +82,7 @@
     const key = info.query;
     if (cache.has(key)) return cache.get(key);
     const endpoint = 'https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrlimit=10&gsrsearch='
-      + encodeURIComponent(info.query) + '&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=800&format=json&origin=*';
+      + encodeURIComponent(info.query) + '&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=800&format=json&origin=*';
     try {
       const response = await fetch(endpoint);
       if (!response.ok) throw new Error('Image search unavailable');
