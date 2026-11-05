@@ -46,17 +46,25 @@
     <!-- Toast Notification -->
     <div id="toast-container" class="fixed top-5 left-5 z-50 space-y-2 pointer-events-none"></div>
 
-    <!-- Auth Modal -->
+    <!-- Auth Modal (Login / Register) -->
     <div id="auth-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-card w-full max-w-md rounded-3xl p-8 shadow-2xl border border-blue-500/30">
             <div class="text-center mb-6">
                 <div class="inline-flex bg-blue-600/20 text-blue-600 dark:text-blue-400 p-4 rounded-2xl mb-3 border border-blue-500/30">
                     <i class="fa-solid fa-car-tunnel text-3xl"></i>
                 </div>
-                <h2 class="text-2xl font-extrabold">تسجيل الدخول إلى AutoDecision AI</h2>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">مشروع تخرج نظم دعم القرار | جامعة القصيم</p>
+                <h2 id="auth-title" class="text-2xl font-extrabold">تسجيل الدخول إلى النظام</h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">كلية إدارة الأعمال - نظم المعلومات الإدارية | جامعة القصيم</p>
             </div>
-            <form onsubmit="handleLogin(event)" class="space-y-4">
+
+            <!-- Tab Switcher -->
+            <div class="grid grid-cols-2 gap-2 bg-slate-200 dark:bg-slate-900 p-1.5 rounded-2xl mb-6 text-xs font-semibold">
+                <button type="button" onclick="switchAuthTab('login')" id="tab-login-btn" class="py-2 rounded-xl bg-blue-600 text-white transition shadow">تسجيل الدخول</button>
+                <button type="button" onclick="switchAuthTab('register')" id="tab-register-btn" class="py-2 rounded-xl text-slate-600 dark:text-slate-400 transition">حساب جديد</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold mb-1.5">البريد الإلكتروني</label>
                     <input type="email" id="login-email" value="demo@autodecision.ai" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition" required>
@@ -68,10 +76,29 @@
                 <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-xl transition shadow-lg shadow-blue-600/30 mt-2">
                     دخول المنصة <i class="fa-solid fa-arrow-left mr-2"></i>
                 </button>
+                <div class="mt-3 text-center">
+                    <span class="text-xs text-slate-500 dark:text-slate-400">حساب تجريبي: <strong class="text-blue-600 dark:text-blue-400">demo@autodecision.ai</strong> / المرور: <strong class="text-blue-600 dark:text-blue-400">123456</strong></span>
+                </div>
             </form>
-            <div class="mt-4 text-center">
-                <span class="text-xs text-slate-500 dark:text-slate-400">حساب تجريبي: <strong class="text-blue-600 dark:text-blue-400">demo@autodecision.ai</strong> / المرور: <strong class="text-blue-600 dark:text-blue-400">123456</strong></span>
-            </div>
+
+            <!-- Register Form -->
+            <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-xs font-semibold mb-1.5">الاسم الكريم (أو الكنية)</label>
+                    <input type="text" id="reg-name" placeholder="مثال: أبو نورة" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold mb-1.5">البريد الإلكتروني</label>
+                    <input type="email" id="reg-email" placeholder="name@example.com" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold mb-1.5">كلمة المرور الجديدة</label>
+                    <input type="password" id="reg-password" placeholder="••••••" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition" required>
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-6 rounded-xl transition shadow-lg shadow-emerald-600/30 mt-2">
+                    إنشاء الحساب والانضمام <i class="fa-solid fa-user-plus mr-2"></i>
+                </button>
+            </form>
         </div>
     </div>
 
@@ -101,13 +128,13 @@
                 </nav>
 
                 <div class="flex items-center space-x-3 space-x-reverse">
-                    <!-- Theme Toggle Button -->
-                    <button onclick="toggleTheme()" class="p-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-yellow-400 hover:scale-105 transition shadow-sm" title="تبديل الوضع الليلي والنهاري">
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="p-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-yellow-400 hover:scale-105 transition shadow-sm" title="تبديل الوضع">
                         <i id="theme-icon" class="fa-solid fa-moon"></i>
                     </button>
                     <div class="bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center shadow-sm">
                         <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse ml-2"></div>
-                        <span>أبو نورة</span>
+                        <span id="user-display-name">أبو نورة</span>
                     </div>
                 </div>
             </div>
@@ -176,7 +203,7 @@
                     <div onclick="switchTab('catalog')" class="glass-card hover:border-purple-500/50 transition cursor-pointer rounded-2xl p-6 group shadow-md">
                         <div class="text-purple-600 dark:text-purple-400 text-2xl mb-3 group-hover:scale-110 transition"><i class="fa-solid fa-database"></i></div>
                         <h3 class="text-lg font-bold">قاعدة بيانات السيارات</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">استعرض الـ 80+ سيارة مع المواصفات والتقييمات الدقيقة والصور المطابقة.</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">استعرض الـ 80+ سيارة مع المواصفات والتقييمات الدقيقة.</p>
                     </div>
                 </div>
             </section>
@@ -355,7 +382,7 @@
                     <div class="flex flex-col sm:flex-row justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-4">
                         <div>
                             <h3 class="text-2xl font-extrabold text-blue-600 dark:text-blue-400">التقرير الأكاديمي النهائي لاتخاذ القرار</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">جامعة القصيم - كلية الحاسب وتقنية المعلومات | نظام دعم القرار (AutoDecision AI)</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">جامعة القصيم - كلية إدارة الأعمال (نظم المعلومات الإدارية) | AutoDecision AI</p>
                         </div>
                         <div class="mt-4 sm:mt-0 flex gap-3 no-print">
                             <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-5 rounded-xl text-xs transition shadow-md">
@@ -367,17 +394,17 @@
                     <div id="report-content" class="space-y-6 text-sm">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="bg-slate-100 dark:bg-slate-900/80 p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
-                                <h4 class="font-bold text-base mb-2 text-blue-600 dark:text-blue-400">1. مدخلات المستخدم والمعايير الأكاديمية</h4>
+                                <h4 class="font-bold text-base mb-2 text-blue-600 dark:text-blue-400">1. بيانات المستخدم والمعايير الأكاديمية</h4>
                                 <ul class="space-y-1.5 text-slate-600 dark:text-slate-300 text-xs">
-                                    <li><strong>المستخدم:</strong> أبو نورة (حساب معتمد)</li>
+                                    <li><strong>المستخدم النشط:</strong> <span id="report-user-name">أبو نورة</span></li>
                                     <li><strong>النموذج المستخدم:</strong> Weighted Multi-Criteria Decision Making (AHP / MCDM)</li>
-                                    <li><strong>الميزانية القصوى:</strong> معالجة تفضيلات حتى 150,000 ريال</li>
+                                    <li><strong>نطاق الميزانية:</strong> معالجة تفضيلات حتى 150,000 ريال</li>
                                     <li><strong>معايير التقييم:</strong> السعر، الاعتمادية، الأمان، استهلاك الوقود، الراحة، وسعة المقاعد.</li>
                                 </ul>
                             </div>
                             <div class="bg-slate-100 dark:bg-slate-900/80 p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
                                 <h4 class="font-bold text-base mb-2 text-emerald-600 dark:text-emerald-400">2. التوصية النهائية للنظام</h4>
-                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed" id="report-rec-summary">
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                                     بناءً على المعالجة التحليلية لـ 80+ سيارة في قاعدة البيانات، ووفقاً لمعايير الوزن النسبي، تم ترشيح السيارات الأكثر توافقاً مع تحقيق أعلى عائد استثماري وأقل تكلفة تشغيلية على المدى الطويل.
                                 </p>
                             </div>
@@ -397,13 +424,14 @@
 
         <!-- Footer -->
         <footer class="bg-white/60 dark:bg-slate-900/60 border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto transition-colors">
-            <p>AutoDecision AI &copy; 2026 | جامعة القصيم - كلية الحاسب وتقنية المعلومات</p>
+            <p>AutoDecision AI &copy; 2026 | جامعة القصيم - كلية إدارة الأعمال (نظم المعلومات الإدارية)</p>
         </footer>
     </div>
 
     <!-- Frontend Script Logic -->
     <script>
         let allCars = [];
+        let activeUser = "أبو نورة";
 
         // Theme Manager
         function setTheme(isDark) {
@@ -423,13 +451,9 @@
             setTheme(!isDark);
         }
 
-        // Init Saved Theme
         const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-            setTheme(false);
-        } else {
-            setTheme(true);
-        }
+        if (savedTheme === 'light') setTheme(false);
+        else setTheme(true);
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
@@ -442,6 +466,29 @@
                 toast.classList.add('translate-y-2', 'opacity-0');
                 setTimeout(() => toast.remove(), 300);
             }, 3500);
+        }
+
+        // Auth Tab Switcher
+        function switchAuthTab(tab) {
+            const loginBtn = document.getElementById('tab-login-btn');
+            const regBtn = document.getElementById('tab-register-btn');
+            const loginForm = document.getElementById('form-login');
+            const regForm = document.getElementById('form-register');
+            const title = document.getElementById('auth-title');
+
+            if (tab === 'login') {
+                loginBtn.className = "py-2 rounded-xl bg-blue-600 text-white transition shadow";
+                regBtn.className = "py-2 rounded-xl text-slate-600 dark:text-slate-400 transition";
+                loginForm.classList.remove('hidden');
+                regForm.classList.add('hidden');
+                title.innerText = "تسجيل الدخول إلى النظام";
+            } else {
+                regBtn.className = "py-2 rounded-xl bg-emerald-600 text-white transition shadow";
+                loginBtn.className = "py-2 rounded-xl text-slate-600 dark:text-slate-400 transition";
+                regForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+                title.innerText = "إنشاء حساب جديد في النظام";
+            }
         }
 
         async function handleLogin(e) {
@@ -457,23 +504,51 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    showToast('تم التحقق وتسجيل الدخول بنجاح!');
-                    document.getElementById('auth-modal').style.display = 'none';
-                    const mainApp = document.getElementById('app-main');
-                    mainApp.classList.remove('hidden');
-                    mainApp.classList.add('flex');
-                    initApp();
+                    activeUser = data.user.name;
+                    finalizeLogin(activeUser);
                 } else {
                     alert(data.error || 'خطأ في بيانات الدخول');
                 }
             } catch (err) {
-                showToast('تم الدخول بنجاح عبر الحساب التجريبي!');
-                document.getElementById('auth-modal').style.display = 'none';
-                const mainApp = document.getElementById('app-main');
-                mainApp.classList.remove('hidden');
-                mainApp.classList.add('flex');
-                initApp();
+                finalizeLogin("أبو نورة");
             }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message || 'تم إنشاء الحساب بنجاح!');
+                    activeUser = name;
+                    finalizeLogin(activeUser);
+                } else {
+                    alert(data.error || 'فشل إنشاء الحساب');
+                }
+            } catch (err) {
+                activeUser = name;
+                finalizeLogin(activeUser);
+            }
+        }
+
+        function finalizeLogin(name) {
+            showToast(`أهلاً بك يا ${name} في النظام!`);
+            document.getElementById('auth-modal').style.display = 'none';
+            const mainApp = document.getElementById('app-main');
+            mainApp.classList.remove('hidden');
+            mainApp.classList.add('flex');
+            document.getElementById('user-display-name').innerText = name;
+            document.getElementById('report-user-name').innerText = name;
+            initApp();
         }
 
         async function initApp() {
@@ -515,7 +590,7 @@
                 tcoSelect.innerHTML += `<option value="${c.id}">${c.name} (${c.price.toLocaleString()} ر.س)</option>`;
                 compSelects.forEach((sel, sIdx) => { 
                     sel.innerHTML += `<option value="${c.id}">${c.name}</option>`;
-                    if (sIdx === index && sIdx < 4) sel.value = c.id; // تحديد افتراضي أول 4 سيارات للمقارنة
+                    if (sIdx === index && sIdx < 4) sel.value = c.id;
                 });
             });
         }
@@ -533,20 +608,19 @@
 
             cars.forEach(car => {
                 grid.innerHTML += `
-                    <div class="glass-card rounded-3xl overflow-hidden hover:border-blue-500/50 transition flex flex-col shadow-lg">
-                        <img src="${car.image}" alt="${car.name}" class="h-48 w-full object-cover">
-                        <div class="p-6 flex flex-col flex-grow">
+                    <div class="glass-card rounded-3xl p-6 hover:border-blue-500/50 transition flex flex-col shadow-lg justify-between">
+                        <div>
                             <div class="flex justify-between items-start mb-2">
                                 <span class="bg-blue-600/15 text-blue-600 dark:text-blue-300 text-xs px-3 py-1 rounded-full font-semibold border border-blue-500/35">${car.category}</span>
                                 <span class="text-emerald-600 dark:text-emerald-400 font-extrabold">${car.price.toLocaleString()} ر.س</span>
                             </div>
                             <h4 class="text-lg font-bold mt-2">${car.name}</h4>
                             <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 line-clamp-2">${car.description}</p>
-                            <div class="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-slate-200 dark:border-slate-800 text-center text-xs">
-                                <div><span class="text-slate-400 block">المحرك</span><span class="font-semibold text-slate-700 dark:text-slate-200">${car.fuel_type}</span></div>
-                                <div><span class="text-slate-400 block">الاعتمادية</span><span class="font-semibold text-amber-600 dark:text-amber-400">${car.reliability_score}/10</span></div>
-                                <div><span class="text-slate-400 block">الاستهلاك</span><span class="font-semibold text-emerald-600 dark:text-emerald-400">${car.fuel_economy} كم/ل</span></div>
-                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-slate-200 dark:border-slate-800 text-center text-xs">
+                            <div><span class="text-slate-400 block">المحرك</span><span class="font-semibold text-slate-700 dark:text-slate-200">${car.fuel_type}</span></div>
+                            <div><span class="text-slate-400 block">الاعتمادية</span><span class="font-semibold text-amber-600 dark:text-amber-400">${car.reliability_score}/10</span></div>
+                            <div><span class="text-slate-400 block">الاستهلاك</span><span class="font-semibold text-emerald-600 dark:text-emerald-400">${car.fuel_economy} كم/ل</span></div>
                         </div>
                     </div>
                 `;
