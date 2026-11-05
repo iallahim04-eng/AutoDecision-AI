@@ -4,7 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AutoDecision AI | نظام دعم القرار الذكي</title>
+<title>دَرْب | نظام دعم القرار الذكي لاختيار السيارة</title>
+<link rel="icon" type="image/svg+xml" href="/darb-logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -102,12 +103,23 @@ td{color:var(--text)}
 .hidden{display:none!important}
 @media(max-width:1100px){.sidebar{width:215px}.main{margin-right:215px;width:calc(100% - 215px)}.car-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.sidebar{transform:translateX(100%);transition:.25s;width:260px}.sidebar.open{transform:translateX(0)}.main{margin:0;width:100%}.topbar{padding:0 16px;height:62px}.mobile-menu{display:inline-grid;place-items:center}.content{padding:22px 15px 45px}.page-head{display:block}.page-head .btn{margin-top:14px}.two,.three{grid-template-columns:1fr}.car-grid{grid-template-columns:1fr}.stats{gap:10px}.stat strong{font-size:20px}.card{padding:16px}.result-grid{grid-template-columns:1fr}.field-grid{grid-template-columns:1fr}.top-title{font-size:14px}.user-chip span{display:none}}
+
+.brand-logo{width:46px;height:46px;object-fit:contain;flex:0 0 auto}
+.auth-card .brand-logo{width:58px;height:58px}
+.darb-hero{position:relative;overflow:hidden;border-radius:22px;margin-bottom:26px;min-height:245px;background:#eaf2fb;box-shadow:var(--shadow)}
+.darb-hero>img{display:block;width:100%;height:260px;object-fit:cover}
+.darb-hero-copy{position:absolute;right:5.5%;top:50%;transform:translateY(-50%);max-width:48%;color:#0a3156;text-shadow:0 1px 8px #ffffffa8}
+.darb-hero-copy span{font-size:clamp(30px,4vw,54px);font-weight:800;letter-spacing:-1px}
+.darb-hero-copy h2{font-size:clamp(17px,2.1vw,26px);margin:4px 0 8px}
+.darb-hero-copy p{font-size:14px;margin:0;color:#45627e}
+@media(max-width:760px){.darb-hero{min-height:185px}.darb-hero>img{height:190px}.darb-hero-copy{right:5%;max-width:58%}.darb-hero-copy p{font-size:11px}}
+
 </style>
 </head>
 <body>
 <div id="auth" class="auth">
   <div class="auth-card">
-    <div class="brand"><div class="brand-icon"><i class="fa-solid fa-car-side"></i></div><div><strong>AutoDecision AI</strong><small>نظام دعم القرار الذكي</small></div></div>
+    <div class="brand"><img class="brand-logo" src="/darb-logo.svg" alt="شعار درب"><div><strong>دَرْب</strong><small>نظام دعم القرار الذكي</small></div></div>
     <h2 id="auth-heading">مرحباً بك في المنصة</h2>
     <p class="subtitle">كلية إدارة الأعمال · نظم المعلومات الإدارية · جامعة القصيم</p>
     <div class="field" style="margin-bottom:13px"><label>البريد الإلكتروني</label><input id="auth-email" type="email" placeholder="name@example.com" value="demo@autodecision.ai"></div>
@@ -121,7 +133,7 @@ td{color:var(--text)}
 
 <div class="layout hidden" id="app">
 <aside class="sidebar" id="sidebar">
-  <div class="brand"><div class="brand-icon"><i class="fa-solid fa-car-side"></i></div><div><strong>AutoDecision AI</strong><small>SMART CAR DECISION SYSTEM</small></div></div>
+  <div class="brand"><img class="brand-logo" src="/darb-logo.svg" alt="شعار درب"><div><strong>دَرْب</strong><small>SMART CAR DECISION SYSTEM</small></div></div>
   <div class="nav-label">القائمة الرئيسية</div>
   <nav class="nav">
     <button class="active" data-tab="dashboard" onclick="switchTab('dashboard')"><i class="fa-solid fa-grid-2"></i> لوحة التحكم</button>
@@ -143,7 +155,8 @@ td{color:var(--text)}
 
 <div class="content">
 <section class="page active" id="page-dashboard">
- <div class="page-head"><div><div class="eyebrow">نظرة عامة على النظام</div><h1>لوحة التحكم</h1><p class="subtitle">اتخذ قرار شراء سيارتك بناءً على البيانات والمعايير التي تهمك.</p></div><button class="btn" onclick="switchTab('decision')"><i class="fa-solid fa-wand-magic-sparkles"></i> ابدأ تحليل التوصية</button></div>
+ <div class="darb-hero"><img src="/darb-hero.svg" alt="درب — طريقك لاختيار السيارة المناسبة"><div class="darb-hero-copy"><span>دَرْب</span><h2>اختيارك للسيارة يبدأ من هنا</h2><p>قارن، حلّل، واتخذ قرارك بثقة.</p></div></div>
+ <div class="page-head"><div><div class="eyebrow">نظرة عامة على النظام</div><h1>مرحباً بك في دَرْب</h1><p class="subtitle">اتخذ قرار شراء سيارتك بناءً على البيانات والمعايير التي تهمك.</p></div><button class="btn" onclick="switchTab('decision')"><i class="fa-solid fa-wand-magic-sparkles"></i> ابدأ تحليل التوصية</button></div>
  <div class="grid stats">
   <div class="card stat"><div><small>السيارات في قاعدة البيانات</small><strong id="stat-cars">—</strong></div><div class="stat-icon"><i class="fa-solid fa-car"></i></div></div>
   <div class="card stat"><div><small>الشركات المصنعة</small><strong id="stat-brands">—</strong></div><div class="stat-icon"><i class="fa-solid fa-industry"></i></div></div>
